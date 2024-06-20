@@ -19,10 +19,13 @@
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QTabWidget" name="tabWidget">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="tab">
+        <widget class="QWidget" name="TAB_createProject">
          <attribute name="title">
           <string>Projekt erstellen</string>
          </attribute>
@@ -30,20 +33,34 @@
           <item row="3" column="0">
            <layout class="QGridLayout" name="gridLayout_3">
             <item row="2" column="1">
-             <widget class="QLineEdit" name="lineEdit_2"/>
+             <widget class="QLineEdit" name="LE_pointEditor">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="PBU_loadFile">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Punktdatei</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="lineEdit"/>
+             <widget class="QLineEdit" name="LE_projectEditor">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
             </item>
             <item row="0" column="0">
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="PBU_openProject">
               <property name="text">
                <string>Projekt öffnen</string>
               </property>
@@ -66,7 +83,10 @@
            </layout>
           </item>
           <item row="4" column="0">
-           <widget class="QTreeWidget" name="treeWidget">
+           <widget class="QTreeWidget" name="TW_tablePoints">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <column>
              <property name="text">
               <string>Punktnummer</string>
@@ -91,7 +111,7 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_2">
+        <widget class="QWidget" name="TAB_roughPlanning">
          <attribute name="title">
           <string>Grobplanung</string>
          </attribute>
@@ -103,7 +123,7 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
-              <widget class="QRadioButton" name="radioButton_2">
+              <widget class="QRadioButton" name="RB_conventional">
                <property name="text">
                 <string>Konventionell (Raster)</string>
                </property>
@@ -113,7 +133,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QRadioButton" name="radioButton">
+              <widget class="QRadioButton" name="PB_ransac">
                <property name="enabled">
                 <bool>false</bool>
                </property>
@@ -151,7 +171,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_3"/>
+             <widget class="QLineEdit" name="LE_projectName"/>
             </item>
             <item>
              <widget class="Line" name="line">
@@ -168,7 +188,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="lineEdit_4"/>
+             <widget class="QLineEdit" name="LE_projetLeader"/>
             </item>
            </layout>
           </item>
@@ -181,14 +201,14 @@
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
                <item row="0" column="0">
-                <widget class="QLabel" name="label_3">
+                <widget class="QLabel" name="L_distance">
                  <property name="text">
                   <string>Distanz: 500 m</string>
                  </property>
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QSlider" name="horizontalSlider">
+                <widget class="QSlider" name="HS_distance">
                  <property name="minimum">
                   <number>0</number>
                  </property>
@@ -216,7 +236,7 @@
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="QSlider" name="horizontalSlider_2">
+                <widget class="QSlider" name="HS_noLines">
                  <property name="minimum">
                   <number>0</number>
                  </property>
@@ -241,14 +261,14 @@
                 </widget>
                </item>
                <item row="3" column="1">
-                <widget class="QLabel" name="label_5">
+                <widget class="QLabel" name="L_lineView">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="label_4">
+                <widget class="QLabel" name="L_noLines">
                  <property name="text">
                   <string>Anzahl Linien: 5</string>
                  </property>
@@ -287,7 +307,7 @@
            </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="PBU_loadDEM">
             <property name="text">
              <string>Höhenmodell laden (© swisstopo)</string>
             </property>
@@ -296,14 +316,14 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="PBU_roughPlanningSingle">
               <property name="text">
                <string>Einzelpunkt prüfen</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QPushButton" name="pushButton_5">
+             <widget class="QPushButton" name="PBU_roughPlanningAll">
               <property name="text">
                <string>alle Punkte prüfen</string>
               </property>

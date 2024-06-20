@@ -10,8 +10,8 @@ import rasterio
 import numpy as np
 import rasterio.transform
 
-from GNSS import GNSS_Point
-from ObjectDefinition import TransformParam, Point2D, Line2D, PointLineSegment, Profile
+from backend.roughplanning.GNSS import GNSS_Point
+from backend.roughplanning.ObjectDefinition import TransformParam, Point2D, Line2D, PointLineSegment, Profile
 
 @dataclass
 class RoughPlanning:

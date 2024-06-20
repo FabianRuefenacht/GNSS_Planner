@@ -20,7 +20,7 @@ def func2(num):
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('gnss_planner_dialog_base.ui', self)
+        uic.loadUi('./frontend/gnss_planner_dialog_base.ui', self)
 
         self.test_button = self.findChild(QPushButton, "Test")
         self.test_button.clicked.connect(self.run_tasks)

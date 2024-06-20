@@ -2,3 +2,4 @@ numpy>=1.20.3
 matplotlib>=3.4.2
 rasterio>=1.2.10
 jupyter>=1.0.0
+fpdf2>=2.7.9

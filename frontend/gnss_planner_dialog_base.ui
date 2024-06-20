@@ -6,39 +6,319 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>780</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="Test">
-    <property name="geometry">
-     <rect>
-      <x>380</x>
-      <y>290</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Go</string>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Projekt erstellen</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="3" column="0">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEdit_2"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QPushButton" name="pushButton_2">
+              <property name="text">
+               <string>Punktdatei</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="lineEdit"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>Projekt öffnen</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="Line" name="line_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="Line" name="line_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0">
+           <widget class="QTreeWidget" name="treeWidget">
+            <column>
+             <property name="text">
+              <string>Punktnummer</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Ostkoordinate</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Nordkoordinate</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Höhe</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_2">
+         <attribute name="title">
+          <string>Grobplanung</string>
+         </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Methode:</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QRadioButton" name="radioButton_2">
+               <property name="text">
+                <string>Konventionell (Raster)</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>RANSAC (in progress)</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Projektname:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit_3"/>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Projekleitung:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="lineEdit_4"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QGroupBox" name="groupBox_2">
+              <property name="title">
+               <string>Analyse Einstellungen:</string>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_4">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_3">
+                 <property name="text">
+                  <string>Distanz: 500 m</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSlider" name="horizontalSlider">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>5000</number>
+                 </property>
+                 <property name="singleStep">
+                  <number>100</number>
+                 </property>
+                 <property name="pageStep">
+                  <number>1000</number>
+                 </property>
+                 <property name="value">
+                  <number>500</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="tickPosition">
+                  <enum>QSlider::TicksBelow</enum>
+                 </property>
+                 <property name="tickInterval">
+                  <number>500</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QSlider" name="horizontalSlider_2">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>80</number>
+                 </property>
+                 <property name="pageStep">
+                  <number>5</number>
+                 </property>
+                 <property name="value">
+                  <number>20</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="tickPosition">
+                  <enum>QSlider::TicksBelow</enum>
+                 </property>
+                 <property name="tickInterval">
+                  <number>10</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_4">
+                 <property name="text">
+                  <string>Anzahl Linien: 5</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="Line" name="line_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="Line" name="line_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <spacer name="verticalSpacer">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="text">
+             <string>Höhenmodell laden (© swisstopo)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QPushButton" name="pushButton_4">
+              <property name="text">
+               <string>Einzelpunkt prüfen</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_5">
+              <property name="text">
+               <string>alle Punkte prüfen</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>800</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

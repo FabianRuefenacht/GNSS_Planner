@@ -23,7 +23,7 @@
          <bool>true</bool>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="TAB_createProject">
          <attribute name="title">
@@ -107,6 +107,11 @@
               <string>Höhe</string>
              </property>
             </column>
+            <column>
+             <property name="text">
+              <string>Antennenhöhe</string>
+             </property>
+            </column>
            </widget>
           </item>
          </layout>
@@ -188,7 +193,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLineEdit" name="LE_projetLeader"/>
+             <widget class="QLineEdit" name="LE_projectLeader"/>
             </item>
            </layout>
           </item>
@@ -200,6 +205,45 @@
                <string>Analyse Einstellungen:</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
+               <item row="3" column="1">
+                <widget class="QSlider" name="HS_noLines">
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>80</number>
+                 </property>
+                 <property name="pageStep">
+                  <number>5</number>
+                 </property>
+                 <property name="value">
+                  <number>20</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="tickPosition">
+                  <enum>QSlider::TicksBelow</enum>
+                 </property>
+                 <property name="tickInterval">
+                  <number>10</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="L_lineView">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="Line" name="line_2">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
                <item row="0" column="0">
                 <widget class="QLabel" name="L_distance">
                  <property name="text">
@@ -235,60 +279,7 @@
                  </property>
                 </widget>
                </item>
-               <item row="2" column="1">
-                <widget class="QSlider" name="HS_noLines">
-                 <property name="minimum">
-                  <number>0</number>
-                 </property>
-                 <property name="maximum">
-                  <number>80</number>
-                 </property>
-                 <property name="pageStep">
-                  <number>5</number>
-                 </property>
-                 <property name="value">
-                  <number>20</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="tickPosition">
-                  <enum>QSlider::TicksBelow</enum>
-                 </property>
-                 <property name="tickInterval">
-                  <number>10</number>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QLabel" name="L_lineView">
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="L_noLines">
-                 <property name="text">
-                  <string>Anzahl Linien: 5</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="Line" name="line_2">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="Line" name="line_3">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
+               <item row="4" column="0">
                 <spacer name="verticalSpacer">
                  <property name="orientation">
                   <enum>Qt::Vertical</enum>
@@ -300,6 +291,46 @@
                   </size>
                  </property>
                 </spacer>
+               </item>
+               <item row="1" column="0">
+                <widget class="Line" name="line_3">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="L_noLines">
+                 <property name="text">
+                  <string>Anzahl Linien: 5</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="L_resolution">
+                 <property name="text">
+                  <string>Auflösung: 1 m</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QSlider" name="HS_resolution">
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>1</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="tickPosition">
+                  <enum>QSlider::TicksBelow</enum>
+                 </property>
+                 <property name="tickInterval">
+                  <number>10</number>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -360,7 +391,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="processLabel">
         <property name="text">
          <string/>
         </property>

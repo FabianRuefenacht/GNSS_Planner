@@ -87,32 +87,49 @@ class RoughPlanning:
 
 # ------------------------------------------------- Main Entry -------------------------------------------------
 
-    def plan(self) -> None:
+    def plan(self, number_of_lines: float | int, line_length: float | int, number_of_segments: float | int) -> None:
         """
         Main entry point --> performs analysis with RANSAC or CONVENTIONAL based on Initialisation of class RoughPlanning.
         """
         if self.method == 'RANSAC':
-            self.plan_ransac()
+            azimuths, elevation_angles = self.plan_ransac()
         elif self.method == 'CONVENTIONAL':
-            self.plan_conventional()
+            azimuths, elevation_angles = self.plan_conventional(number_of_lines=number_of_lines, line_length=line_length, number_of_segments=number_of_segments)
         else:
             raise AttributeError("Unsupported method. Use 'RANSAC' or 'CONVENTIONAL'!")
         
-        return
+        return (azimuths, elevation_angles)
   
 
 # ------------------------------------------------ CONVENTIONAL ------------------------------------------------
 
-    def plan_conventional(self) -> None:
+    def plan_conventional(self, number_of_lines: float | int, line_length: float | int, number_of_segments: float | int) -> tuple:
         """
         Entrypoint for CONVENTIONAL method.
         """
     # ToDo main handler CONVENTIONAL
         transformation: TransformParam = self.read_raster()
         pix_size: float = transformation.pix_size_u # pixel-size for transformation of line
-        print("pixsize", pix_size)
 
-        return
+        # if segmentsize is smaller than the actual width of a cell -> segmentsize will be overwritten with cell size
+        if line_length / pix_size < number_of_segments:
+            number_of_segments = line_length / pix_size
+        
+        # get lines, azimuths and initialize elevation angles
+        lines = self.create_lines(number_of_lines=number_of_lines, line_length=line_length)
+        
+        azimuths = [400 / number_of_lines * i for i in range(number_of_lines)]
+        elevation_angles = []
+
+        # iterate over each line
+        for line in lines: # may  later be seperated on many cores
+            segments = self.segment_line(number_of_segments=number_of_segments, line=line) # segment per line
+            self.transform_linesegments(line_points=segments) # transformed segment per line
+            profile = self.create_profile(line_points=segments) # create profile-Object
+            max_alpha = self.get_max_angle(profile=profile) # get maximal elevation angle for each line
+            elevation_angles.append(max_alpha * 200 / np.pi) # append elevation angle to array
+
+        return (azimuths, elevation_angles)
         
     def read_raster(self) -> TransformParam:
         """
@@ -232,11 +249,12 @@ class RoughPlanning:
         with rasterio.open(self.dem_path) as src:
             width = src.width
             height = src.height
+        
 
-            if index[0] < 0 or index[1] < 0:
-                raise EOFError("Expansion DEM not sufficient!")
-            if index[0] > width or index[1] > height:
-                raise EOFError("Expansion DEM not sufficient!")
+            if index[1] < 0 or index[0] < 0:
+                raise EOFError(f"Expansion DEM not sufficient!{width} {index[0]} {height} {index[1]}")
+            if index[1] > width or index[0] > height:
+                raise EOFError(f"Expansion DEM not sufficient!{width} {index[0]} {height} {index[1]}")
 
             # read value of pixel on first (1) band
             pixel_value = src.read(1)[index]

@@ -180,3 +180,95 @@ class RoughPlanDrawer:
         plt.close(fig_legend)  # Close the figure to release memory
 
         return
+    
+    
+    def draw_polar_preview(self, num_lines, min_elevation, line_length):
+        """
+        Draw a polar diagram with radial lines and axis labels in cardinal directions.
+
+        Parameters
+        ----------
+        num_lines : int
+            Number of radial lines to draw.
+        min_elevation : float
+            Elevation angle (in degrees) of the cutoff curve.
+        line_length : float
+            Length of the radial lines.
+
+        Returns
+        -------
+        fig : matplotlib.figure.Figure
+            Matplotlib figure object containing the polar diagram.
+        """
+        radius_length = 5000  # fixed radius
+
+        # create fig with two subplots next to each other
+        fig, (ax1, ax2) = plt.subplots(1, 2, subplot_kw={'projection': 'polar'}, figsize=(14, 7))
+
+        # ------------------- Main Diagram ------------------- #
+
+        # Set 0 to azimuth and set rotation to clockwise
+        ax1.set_theta_zero_location('N')
+        ax1.set_theta_direction(-1)
+
+        # labels for angle
+        directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N']
+        direction_angles_rad = np.linspace(0, 2 * np.pi, len(directions))
+        ax1.set_xticks(direction_angles_rad)
+        ax1.set_xticklabels(directions)
+
+        # calc angles for radial line
+        angles = np.linspace(0, 2 * np.pi, num_lines, endpoint=False)
+        
+        # draw radial line
+        for angle in angles:
+            ax1.plot([angle, angle], [0, line_length], color='black')
+        
+        # set radial limit
+        ax1.set_ylim(0, radius_length)
+        
+        # write axis label in meters
+        radial_ticks = np.linspace(0, radius_length, 6)
+        radial_labels_meter = [f'{int(tick)} m' for tick in radial_ticks]
+        
+        # set positions for radial ticks
+        ax1.set_yticks(radial_ticks)
+        
+        # user defined axis-labels
+        ax1.set_yticklabels([])
+        for i, label in enumerate(radial_labels_meter):
+            ax1.text(np.pi, radial_ticks[i], label, color='black', ha='left', va='center', fontsize=8)
+
+        # ------------------- Cutoff-Angle-Diagramm ------------------- #
+
+        # Set 0 to azimuth and set rotation to clockwise
+        ax2.set_theta_zero_location('N')
+        ax2.set_theta_direction(-1)
+        
+        # draw Cutoff-Curve (circle)
+        cutoff_radius = 100 - min_elevation
+        ax2.plot(np.linspace(0, 2 * np.pi, 100), [cutoff_radius] * 100, color='red', linestyle='--')
+        
+        # fill segment between 0 and cutoff
+        ax2.fill_between(np.linspace(0, 2 * np.pi, 100), cutoff_radius, radius_length, color='red', alpha=0.2)
+        
+        # set limit for max angle (100 gon)
+        ax2.set_ylim(0, 100)
+        
+        # label radial axis in Gon
+        gon_ticks = np.linspace(0, 100, 6)
+        gon_labels = [f"{100 - i * 20} gon" for i in range(6)]
+        ax2.set_yticks(gon_ticks)
+        for i, label in enumerate(gon_labels):
+            ax2.text(0, gon_ticks[i], label, color='black', ha='right', va='center', fontsize=8)
+        
+        # hide meters
+        ax2.set_yticklabels([])
+        # user defined axis-labels
+        ax2.set_xticks(direction_angles_rad)
+        ax2.set_xticklabels(directions)
+        
+        # show diagram
+        plt.tight_layout()
+
+        return fig

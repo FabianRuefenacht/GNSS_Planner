@@ -2,8 +2,10 @@ import sys
 import time
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QApplication, QLineEdit, QTreeWidget, QTabWidget, QFileDialog, QRadioButton, QLabel, QSlider, QProgressBar
 from PyQt5 import uic
+from PyQt5.QtGui import QPixmap, QPainter
 from multiprocessing import Pool
 import os
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from backend.roughplanning.GNSS import GNSS_Session, GNSS_Point
 from backend.roughplanning.ReadWritePoints import ReadPoints, WritePoints
@@ -120,6 +122,9 @@ class MainWindow(QMainWindow):
             # enable rest of UI
             self.points_table_TW.setEnabled(True)
             self.main_tab_widget.setTabEnabled(1, True)
+
+            # update graphic
+            self.update_preview_image()
             return
         return
     
@@ -179,6 +184,10 @@ class MainWindow(QMainWindow):
         return value
 
     def update_distance(self) -> None:
+        # update graphic
+        self.update_preview_image()
+        
+        # update values
         value = self.get_distance_slider()
         self.distance_L.setText(f"Distanz: {value} m")
         return
@@ -188,6 +197,7 @@ class MainWindow(QMainWindow):
         return value
 
     def update_segment_resolution(self) -> None:
+        # update values
         value = self.get_segment_resolution()
         self.segment_L.setText(f"Auflösung: {value} m")
         return
@@ -197,6 +207,10 @@ class MainWindow(QMainWindow):
         return value
     
     def update_cutoff_angle(self) -> None:
+        # update graphic
+        self.update_preview_image()
+        
+        # update values
         value = self.get_cutoff()
         self.cutoffL.setText(f"Cut-Off-Winkel: {value} gon")
         return
@@ -206,8 +220,37 @@ class MainWindow(QMainWindow):
         return value
 
     def update_number_of_lines(self) -> None:
+        # update graphic
+        self.update_preview_image()
+        
+        # update values
         value = self.get_number_of_lines()
         self.number_of_lines_L.setText(f"Anzahl Linien: {value}")
+        return
+    
+    def update_preview_image(self) -> None:
+        drawer = RoughPlanDrawer()
+
+        num_lines = self.get_number_of_lines()  # Annahme: Funktionen zur Rückgabe der Slider-Werte
+        min_elevation = self.get_cutoff()
+        line_length = self.get_distance_slider()
+
+        figure = drawer.draw_polar_preview(num_lines=num_lines, min_elevation=min_elevation, line_length=line_length)
+
+        canvas = FigureCanvas(figure)
+        canvas.draw()
+
+        # Erstellen eines QPixmap, das die gerenderte Figur enthält
+        img = QPixmap(canvas.size())
+
+        # Verwenden von QPainter, um die gerenderte Figur auf das QPixmap zu zeichnen
+        painter = QPainter(img)
+        canvas.render(painter)
+        painter.end()
+
+        # Anzeigen des QPixmap im QLabel
+        self.line_graph_L.setPixmap(img)
+
         return
 
 if __name__ == '__main__':
@@ -215,3 +258,5 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
+
+

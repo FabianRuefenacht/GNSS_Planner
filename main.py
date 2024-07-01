@@ -12,6 +12,7 @@ from backend.roughplanning.Downloader import LoadRasterDEM
 from backend.roughplanning.Merger import RasterMerger
 from backend.roughplanning.RoughPlanning import RoughPlanning
 from backend.roughplanning.RoughPlanDrawer import RoughPlanDrawer
+from backend.roughplanning.PDFCreator import PDFCreator
 
 
 class MainWindow(QMainWindow):
@@ -56,6 +57,11 @@ class MainWindow(QMainWindow):
         self.segment_L = self.findChild(QLabel, "L_resolution")
         self.segment_slider = self.findChild(QSlider, "HS_resolution")
         self.segment_slider.valueChanged.connect(self.update_segment_resolution)
+
+            # cut-off-angle slider
+        self.cutoffL = self.findChild(QLabel, "L_cutoff")
+        self.cutoff_slider = self.findChild(QSlider, "HS_cutoff")
+        self.cutoff_slider.valueChanged.connect(self.update_cutoff_angle)
 
             # number of lines slider
         self.number_of_lines_L = self.findChild(QLabel, "L_noLines")
@@ -144,7 +150,7 @@ class MainWindow(QMainWindow):
         else:
             method = 'CONVENTIONAL'
 
-        min_elevation = 10
+        min_elevation = self.get_cutoff()
 
         number_of_lines = int(self.get_number_of_lines())
         line_length = self.get_distance_slider()
@@ -159,8 +165,14 @@ class MainWindow(QMainWindow):
             polar_path = os.path.join(self.parent_directory, f"results/polar{point.name}.png")
             drawer.draw_panorama_diagram(azimuths=azimuths, elevation_angles=elevation_angles, min_elevation=min_elevation, image_path=panorama_path, pointname=point.name)
             drawer.draw_polar_diagram(azimuths=azimuths, elevation_angles=elevation_angles, min_elevation=min_elevation, image_path=polar_path, pointname=point.name)
+            
         legend_path = os.path.join(self.parent_directory, "results/legend.png")
         drawer.save_legend(legend_path=legend_path)
+
+        pdf_creator = PDFCreator(results_path=self.results_directory)
+        pdf_creator.create_protocol(points=self.gnss_session.get_points(), projectname=self.project_name_LE.text(), projectleader=self.project_leader_LE.text())
+
+        return
 
     def get_distance_slider(self) -> float | int:
         value = self.distance_slider.value()
@@ -180,13 +192,22 @@ class MainWindow(QMainWindow):
         self.segment_L.setText(f"Auflösung: {value} m")
         return
     
+    def get_cutoff(self) -> float | int:
+        value = self.cutoff_slider.value()
+        return value
+    
+    def update_cutoff_angle(self) -> None:
+        value = self.get_cutoff()
+        self.cutoffL.setText(f"Cut-Off-Winkel: {value} gon")
+        return
+    
     def get_number_of_lines(self) -> float | int:
         value = self.number_of_lines_slider.value()
         return value
 
     def update_number_of_lines(self) -> None:
         value = self.get_number_of_lines()
-        self.number_of_lines_L.setText(f"Anzahl Linien: {value} m")
+        self.number_of_lines_L.setText(f"Anzahl Linien: {value}")
         return
 
 if __name__ == '__main__':

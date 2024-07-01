@@ -73,7 +73,7 @@ class RoughPlanDrawer:
 
         return
     
-    def draw_polar_diagram(self, azimuths: list[float], elevation_angles: list[float], min_elevation: float | int, image_path: str, pointname: str) -> None:
+    def draw_polar_diagram(self, azimuths, elevation_angles, min_elevation, image_path, pointname):
         """
         Draws a polar diagram representing elevation angles and a minimum elevation threshold.
 
@@ -93,15 +93,6 @@ class RoughPlanDrawer:
         Returns
         -------
         None
-
-        Notes
-        -----
-        This method converts azimuths and elevation angles to radians, interpolates the elevation angles
-        to generate a smoother plot, and plots the interpolated data in a polar coordinate system. The
-        diagram includes filled areas representing elevation angles and a cutoff line for the minimum
-        elevation threshold. The x-axis represents compass directions, while the radial axis represents
-        elevation angles in radians. The diagram is saved as an image file specified by image_path, and
-        the plot is closed to release memory resources.
         """
         # Convert azimuths and elevation angles to radians
         azimuths_rad = np.deg2rad(np.array(azimuths) * 9 / 10)
@@ -109,11 +100,15 @@ class RoughPlanDrawer:
         min_elevation_rad = (100 - min_elevation) * np.pi / 200
 
         # Interpolation
-        interpolated_azimuths_rad = np.linspace(azimuths_rad[0], azimuths_rad[-1], 100)  # Generiere 100 interpolierte Azimutwerte
+        interpolated_azimuths_rad = np.linspace(azimuths_rad[0], azimuths_rad[-1], 100)
         interpolated_elevation_angles_rad = np.interp(interpolated_azimuths_rad, azimuths_rad, elevation_angles_rad)
 
         # Create a polar plot
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+
+        # Adjust the direction so that 0 radians is at the top
+        ax.set_theta_zero_location('N')
+        ax.set_theta_direction(-1)  # Set the direction of the angles to clockwise
 
         # Plot the elevation angles
         ax.plot(interpolated_azimuths_rad, interpolated_elevation_angles_rad, color='grey')
@@ -126,7 +121,7 @@ class RoughPlanDrawer:
 
         # Customize the plot
         ax.set_ylim(0, np.pi / 2)  # Set the limit for the radial coordinate (0 to 100 gon)
-        ax.set_yticks([0 * np.pi / 200, 20 * np.pi / 200, 40 * np.pi / 200, 60 * np.pi / 200, 80 * np.pi / 200, 100 * np.pi / 200])  # Set y-ticks (0, 20, 40, 60, 80, 100 gon)
+        ax.set_yticks([0 * np.pi / 200, 20 * np.pi / 200, 40 * np.pi / 200, 60 * np.pi / 200, 80 * np.pi / 200, 100 * np.pi / 200])
         ax.set_yticklabels(['100', '80', '60', '40', '20', '0'])
 
         # Set x-ticks to represent the directions
@@ -140,7 +135,7 @@ class RoughPlanDrawer:
         # Save the figure
         plt.savefig(image_path)
 
-        plt.close(fig)  # Schließe das Diagramm, um Speicher freizugeben
+        plt.close(fig)  # Close the figure to release memory
 
         return
     

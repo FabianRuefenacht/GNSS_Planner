@@ -9,9 +9,18 @@ from typing import Literal, List
 import rasterio
 import numpy as np
 import rasterio.transform
+from multiprocessing import Pool
 
 from backend.roughplanning.GNSS import GNSS_Point
 from backend.roughplanning.ObjectDefinition import TransformParam, Point2D, Line2D, PointLineSegment, Profile
+
+def process_line(args):
+    self, line, number_of_segments = args
+    segments = self.segment_line(number_of_segments=number_of_segments, line=line)  # segment per line
+    self.transform_linesegments(line_points=segments)  # transformed segment per line
+    profile = self.create_profile(line_points=segments)  # create profile-Object
+    max_alpha = self.get_max_angle(profile=profile)  # get maximal elevation angle for each line
+    return max_alpha * 200 / np.pi  # return elevation angle
 
 @dataclass
 class RoughPlanning:
@@ -107,27 +116,23 @@ class RoughPlanning:
         """
         Entrypoint for CONVENTIONAL method.
         """
-    # ToDo main handler CONVENTIONAL
         transformation: TransformParam = self.read_raster()
-        pix_size: float = transformation.pix_size_u # pixel-size for transformation of line
+        pix_size: float = transformation.pix_size_u  # pixel-size for transformation of line
 
         # if segmentsize is smaller than the actual width of a cell -> segmentsize will be overwritten with cell size
         if line_length / pix_size < number_of_segments:
             number_of_segments = line_length / pix_size
-        
+
         # get lines, azimuths and initialize elevation angles
         lines = self.create_lines(number_of_lines=number_of_lines, line_length=line_length)
-        
         azimuths = [400 / number_of_lines * i for i in range(number_of_lines)]
-        elevation_angles = []
+        
+        # Prepare arguments for process_line
+        args = [(self, line, number_of_segments) for line in lines]
 
-        # iterate over each line
-        for line in lines: # may  later be seperated on many cores
-            segments = self.segment_line(number_of_segments=number_of_segments, line=line) # segment per line
-            self.transform_linesegments(line_points=segments) # transformed segment per line
-            profile = self.create_profile(line_points=segments) # create profile-Object
-            max_alpha = self.get_max_angle(profile=profile) # get maximal elevation angle for each line
-            elevation_angles.append(max_alpha * 200 / np.pi) # append elevation angle to array
+        # Use multiprocessing to process lines in parallel
+        with Pool() as pool:
+            elevation_angles = pool.map(process_line, args)
 
         return (azimuths, elevation_angles)
         

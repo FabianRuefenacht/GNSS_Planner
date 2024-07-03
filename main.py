@@ -16,6 +16,8 @@ from backend.roughplanning.RoughPlanning import RoughPlanning
 from backend.roughplanning.RoughPlanDrawer import RoughPlanDrawer
 from backend.roughplanning.PDFCreator import PDFCreator
 
+from backend.roughplanning.helper_functions.ui import update_progresBar
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -93,6 +95,7 @@ class MainWindow(QMainWindow):
         self.gnss_session = GNSS_Session()
         
     def open_project(self) -> None:
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=0, text="Projekt öffnen")
         self.parent_directory = QFileDialog.getExistingDirectory(self, "Wähle einen Ordner aus!")
         if self.parent_directory:
             self.open_project_LE.setText(self.parent_directory)
@@ -103,11 +106,14 @@ class MainWindow(QMainWindow):
             if not os.path.exists(self.results_directory):
                 os.mkdir(self.results_directory)
 
+                update_progresBar(bar=self.progressbar, label=self.process_label, value=100, text="Projekt erstellt")
+            update_progresBar(bar=self.progressbar, label=self.process_label, value=100, text="Projekt geöffnet")
             return
         return
-    
+
     def ask_open_points(self) -> None:
         # get filepath
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=0, text="lade Punkte")
         self.points_file, _ = QFileDialog.getOpenFileName(self, "Wähle eine Datei aus!", self.parent_directory, "CSV(*.csv), TXT(*.txt)")
         self.load_points_LE.setText(self.points_file)
         if self.points_file:
@@ -125,24 +131,32 @@ class MainWindow(QMainWindow):
 
             # update graphic
             self.update_preview_image()
+            update_progresBar(bar=self.progressbar, label=self.process_label, value=100, text="Punkte geladen")
             return
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=0, text="Fehlgeschlagen: lade Punkte")
         return
     
     def load_dem(self) -> None:
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=0, text="Berechne BBox")
         creator = BBOXCreator(session=self.gnss_session)
         bbox: BBOX = creator.get_bbox()
 
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=10, text="Puffere BBox")
         bbox = bbox.puffer_box(distance=self.get_distance_slider())
 
         merger = RasterMerger(path=self.raster_directory)
         merger.remove_downloads()
 
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=20, text="Lade DEM herunter")
         loader: LoadRasterDEM = LoadRasterDEM(bbox=bbox, download_folder=self.raster_directory)
         tiles: list = loader.get_tiles()
         loader.load_raster(tiles=tiles)
 
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=80, text="Füge Raster zusammen")
         merger.merge_raster()
         merger.remove_downloads()
+        
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=100, text="DEM heruntergeladen")
 
         return
 

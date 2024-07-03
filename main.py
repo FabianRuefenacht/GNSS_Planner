@@ -189,7 +189,7 @@ class MainWindow(QMainWindow):
         drawer.save_legend(legend_path=legend_path)
 
         pdf_creator = PDFCreator(results_path=self.results_directory)
-        pdf_creator.create_protocol(points=self.gnss_session.get_points(), projectname=self.project_name_LE.text(), projectleader=self.project_leader_LE.text())
+        pdf_creator.create_protocol(points=self.gnss_session.get_points(), projectname=self.project_name_LE.text(), projectleader=self.project_leader_LE.text(), distance=self.get_distance_slider(), segment_length=self.get_segment_resolution(), no_lines=self.get_number_of_lines(), cutoff=self.get_cutoff())
 
         return
 

@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
         points = self.gnss_session.get_points()
 
         for pt_idx, point in enumerate(points):
-            percentage_counter = int(pt_idx / len(points) * 100) # for progresBar and label
+            percentage_counter = int(pt_idx / len(points) * 100) # for progressBar and label
             update_progresBar(bar=self.progressbar, label=self.process_label, value=percentage_counter, text=f"{pt_idx + 1} / {len(points)} Grobplanung.")
             rough_planner = RoughPlanning(point=point, dem_path=os.path.join(self.raster_directory, "raster.tif"), method=method)
             azimuths, elevation_angles = rough_planner.plan(number_of_lines=number_of_lines, line_length=line_length, number_of_segments=number_of_segments)

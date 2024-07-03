@@ -175,7 +175,11 @@ class MainWindow(QMainWindow):
         line_length = self.get_distance_slider()
         number_of_segments = int(line_length / self.get_segment_resolution())
 
-        for point in self.gnss_session.get_points():
+        points = self.gnss_session.get_points()
+
+        for pt_idx, point in enumerate(points):
+            percentage_counter = int(pt_idx / len(points) * 100) # for progresBar and label
+            update_progresBar(bar=self.progressbar, label=self.process_label, value=percentage_counter, text=f"{pt_idx + 1} / {len(points)} Grobplanung.")
             rough_planner = RoughPlanning(point=point, dem_path=os.path.join(self.raster_directory, "raster.tif"), method=method)
             azimuths, elevation_angles = rough_planner.plan(number_of_lines=number_of_lines, line_length=line_length, number_of_segments=number_of_segments)
 
@@ -188,9 +192,11 @@ class MainWindow(QMainWindow):
         legend_path = os.path.join(self.parent_directory, "results/legend.png")
         drawer.save_legend(legend_path=legend_path)
 
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=99, text=f"erstelle Protokoll")
         pdf_creator = PDFCreator(results_path=self.results_directory)
         pdf_creator.create_protocol(points=self.gnss_session.get_points(), projectname=self.project_name_LE.text(), projectleader=self.project_leader_LE.text(), distance=self.get_distance_slider(), segment_length=self.get_segment_resolution(), no_lines=self.get_number_of_lines(), cutoff=self.get_cutoff())
 
+        update_progresBar(bar=self.progressbar, label=self.process_label, value=100, text=f"Grobplanung abgeschlossen")
         return
 
     def get_distance_slider(self) -> float | int:
